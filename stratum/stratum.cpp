@@ -128,6 +128,7 @@ YAAMP_ALGO g_algos[] =
 	{"xevan", xevan_hash, 0x100, 0, 0},
 
 	{"x16r", x16r_hash, 0x100, 0, 0},
+	{"x16rv2", x16rv2_hash, 0x100, 0, 0},
 	{"x16s", x16s_hash, 0x100, 0, 0},
 	{"timetravel", timetravel_hash, 0x100, 0, 0},
 	{"bitcore", timetravel10_hash, 0x100, 0, 0},
@@ -140,11 +141,14 @@ YAAMP_ALGO g_algos[] =
 	{"allium", allium_hash, 0x100, 0, 0},
 	{"lyra2", lyra2re_hash, 0x80, 0, 0},
 	{"lyra2v2", lyra2v2_hash, 0x100, 0, 0},
+	{"lyra2v3", lyra2v3_hash, 0x100, 0, 0},
 	{"lyra2z", lyra2z_hash, 0x100, 0, 0},
+	{"lyra2zz", lyra2zz_hash, 0x100, 0, 0},
 
 	{"bastion", bastion_hash, 1, 0 },
 	{"blake", blake_hash, 1, 0 },
 	{"blakecoin", blakecoin_hash, 1 /*0x100*/, 0, sha256_hash_hex },
+	{"blake2b", blake2b_hash, 1, 0 },
 	{"blake2s", blake2s_hash, 1, 0 },
 	{"vanilla", blakecoin_hash, 1, 0 },
 	{"decred", decred_hash, 1, 0 },
@@ -193,6 +197,8 @@ YAAMP_ALGO g_algos[] =
 	{"aergo", aergo_hash, 1, 0, 0},
 
 	{"sha256t", sha256t_hash, 1, 0, 0}, // sha256 3x
+
+	{"sha256q", sha256q_hash, 1, 0, 0}, // sha256 4x
 
 	{"sib", sib_hash, 1, 0, 0},
 
