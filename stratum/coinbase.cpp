@@ -113,7 +113,8 @@ void coinbase_create(YAAMP_COIND *coind, YAAMP_JOB_TEMPLATE *templ, json_value *
 	char script1[4*1024];
 	sprintf(script1, "%s%s%s08", eheight, templ->flags, etime);
 
-	char script2[32] = "7969696d7000"; // "yiimp\0" in hex ascii
+	//char script2[32] = "7969696d7000"; // "yiimp\0" in hex ascii
+	char script2[32] = "2f506f776572506f6f6c2f00"; // "PowerPool\0" in hex ascii
 
 	if(!coind->pos && !coind->isaux && templ->auxs_size)
 		coinbase_aux(templ, script2);
@@ -354,9 +355,11 @@ void coinbase_create(YAAMP_COIND *coind, YAAMP_JOB_TEMPLATE *templ, json_value *
 	json_value* founder = json_get_object(json_result, "founder");
 
 	if (!coind->hasmasternodes && founder_enabled && founder) {
+	//if ((!coind->hasmasternodes && founder_enabled && founder) || (founder_enabled && founder && (strcmp(coind->symbol, "PGNt") == 0))) {
 		char founder_payee[256] = { 0 };
 		char founder_script[1024] = { 0};
 		const char *payee = json_get_string(founder, "payee");
+		//bool founder_use_p2sh = ((strcmp(coind->symbol, "PGN") == 0 || strcmp(coind->symbol, "PGNt") == 0));
 		bool founder_use_p2sh = (strcmp(coind->symbol, "PGN") == 0);
 		json_int_t amount = json_get_int(founder, "amount");
 		if(payee && amount) {
@@ -559,6 +562,29 @@ void coinbase_create(YAAMP_COIND *coind, YAAMP_JOB_TEMPLATE *templ, json_value *
 				}
 			}
 		}
+		char founder_payee[256] = { 0 };
+		char founder_script[1024] = { 0};
+		const char *payee = json_get_string(founder, "payee");
+		//bool founder_use_p2sh = ((strcmp(coind->symbol, "PGN") == 0 || strcmp(coind->symbol, "PGNt") == 0));
+		bool founder_use_p2sh = (strcmp(coind->symbol, "PGN") == 0);
+		json_int_t amount = json_get_int(founder, "amount");
+		if(payee && amount) {
+			if (payee) snprintf(founder_payee, 255, "%s", payee);
+			if (strlen(founder_payee) == 0)
+				stratumlog("ERROR %s has no charity_address set!\n", coind->name);
+			base58_decode(founder_payee, founder_script);
+			available -= amount;
+			npayees++;
+			if(founder_use_p2sh) {
+				p2sh_pack_tx(coind, script_dests, amount, founder_script);
+			} else {
+				job_pack_tx(coind, script_dests, amount, founder_script);
+			}
+			debuglog("%s founder address %s, amount %lld\n", coind->symbol,founder_payee, amount);
+			debuglog("%s founder script %s\n", coind->symbol,founder_script);
+			debuglog("%s scripts %s\n", coind->symbol, templ->coinb2);
+		}
+		
 		sprintf(payees, "%02x", npayees);
 		strcat(templ->coinb2, payees);
 		if (templ->has_segwit_txs) strcat(templ->coinb2, commitment);
