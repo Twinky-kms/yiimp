@@ -19,6 +19,7 @@
 #include <errmsg.h>
 #include <ifaddrs.h>
 #include <dirent.h>
+
 #include <iostream>
 #include <vector>
 
@@ -159,7 +160,6 @@ void sha256_double_hash_hex(const char *input, char *output, unsigned int len);
 #include "algos/x16s.h"
 #include "algos/x17.h"
 #include "algos/x22i.h"
-#include "algos/x21s.h"
 #include "algos/xevan.h"
 #include "algos/hmq17.h"
 #include "algos/nist5.h"
